@@ -16,4 +16,8 @@ class User < ApplicationRecord
     Tweet.where(user_id: id).count
   end
 
+  def likes_count
+    Like.where(user_id: id).count
+  end
+
 end
