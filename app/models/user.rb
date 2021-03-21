@@ -2,6 +2,8 @@ class User < ApplicationRecord
   # attr_accessible :tweet_attributes
   has_many :tweets
   has_many :likes, dependent: :destroy
+  has_many :friends, class_name: 'Friend', foreign_key: :friends_id
+
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -19,5 +21,4 @@ class User < ApplicationRecord
   def likes_count
     Like.where(user_id: id).count
   end
-
 end

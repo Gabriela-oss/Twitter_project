@@ -4,7 +4,15 @@ class TweetsController < ApplicationController
   # GET /tweets or /tweets.json
   def index
     @tweet = Tweet.new
-    @tweets = Tweet.all.order(updated_at: :desc).page params[:page]
+    if current_user
+      friend_ids = Friend.where(user_id: current_user).pluck(:friends_id)
+      @tweets = Tweet.tweets_for_me(friend_ids)
+    else
+      @tweets = Tweet.all
+    end
+    # binding.pry
+    @tweets = @tweets.order(updated_at: :desc).page(params[:page])
+    @tweets
   end
 
   # GET /tweets/1 or /tweets/1.json
