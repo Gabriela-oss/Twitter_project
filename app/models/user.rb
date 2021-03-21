@@ -12,4 +12,8 @@ class User < ApplicationRecord
     Friend.where(user_id: id).count
   end
 
+  def tweets_count
+    Tweet.where(user_id: id).count
+  end
+
 end

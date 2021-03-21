@@ -8,6 +8,7 @@ ActiveAdmin.register User do
     column :name
     column :photo
     column :friends_count
+    column :tweets_count
     column :created_at
     actions
   end
