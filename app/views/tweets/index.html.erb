@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Tweets</h1>
+<%if user_signed_in?%>
+
+<%= render 'form', tweet: @tweet %>
+
+<%end%>
+
+<%= paginate @tweets %>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Content</th>
+      <th>Photo</th>
+      <th>Retweets</th>
+      <th>Active</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tweets.each do |tweet| %>
+      <tr>
+        <td><%= tweet.content %> <p><%= tweet.likes.count %> <%= (tweet.likes.count) == 1 ? 'Like' : 'Likes'%></p></td>
+        
+        <td class= "border border-info" ><%= image_tag (tweet.user.photo || '') %></td>
+        <td><%= tweet.active %></td>
+        <% if tweet.created_at < 1.hour.ago%> 
+        <td><%= link_to time_ago_in_words(tweet.created_at), tweet %></td>
+        <% else %>
+        <td> <%= link_to time_ago_in_words(tweet.created_at), tweet %> </td>
+        <% end %>
+        <td><%= link_to 'Edit', edit_tweet_path(tweet) %></td>
+        <td><%= link_to 'Destroy', tweet, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
