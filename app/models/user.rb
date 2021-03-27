@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # attr_accessible :tweet_attributes
   has_many :tweets
   has_many :likes, dependent: :destroy
-  has_many :friends, class_name: 'Friend', foreign_key: :friends_id
+  has_many :friends
 
 
   # Include default devise modules. Others available are:

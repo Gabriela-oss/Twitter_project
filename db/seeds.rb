@@ -16,7 +16,8 @@ User.destroy_all
   puts "User has been created #{user.name}"
   
   7.times do 
-  tweet = user.tweets.build(content: Faker::Lorem.sentence)
-  tweet.save
+    tweet = user.tweets.build(content: Faker::Lorem.sentence)
+    tweet.save
   end
-endAdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+end 
+  AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development? 
