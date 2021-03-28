@@ -6,13 +6,18 @@ class TweetsController < ApplicationController
     @tweet = Tweet.new
     if current_user
       friend_ids = Friend.where(user_id: current_user).pluck(:friends_id)
-      @tweets = Tweet.tweets_for_me(friend_ids)
+      @tweets = []
+      friend_ids.each do |friend_id| 
+        User.find(friend_id).tweets.each do |tweet|
+          @tweets.push tweet
+        end
+      end
     else
-      @tweets = Tweet.all
+      @tweets = Tweet.includes([:user]).all
+      @tweets = @tweets.order(updated_at: :desc).page(params[:page])
+      @tweets
     end
     # binding.pry
-    @tweets = @tweets.order(updated_at: :desc).page(params[:page])
-    @tweets
   end
 
   # GET /tweets/1 or /tweets/1.json
@@ -33,7 +38,7 @@ class TweetsController < ApplicationController
     @tweet = current_user.tweets.new tweet_params
 
     if current_user
-      @tweet.user_id = current_user.id 
+      @tweet.user_id = current_user.id
     end
 
     respond_to do |format|
@@ -69,14 +74,24 @@ class TweetsController < ApplicationController
     end
   end
 
+  def search
+    @tweet = Tweet.new
+    #@tweets = Tweet.where.page(params[:page, :content => "%#{params[:search]}%"])
+    @tweets = Tweet.where('lower(content) LIKE :content', content: "#{params[:content]}%").page(params[:page])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tweet
+      begin
       @tweet = Tweet.find(params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        redirect_to tweets_url, notice: "ERROR: Tweet no encontrado"
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def tweet_params
-      params.require(:tweet).permit(:content, :user_id, :photo, :retweets, :active)
+      params.require(:tweet).permit(:content, :active)
     end
 end

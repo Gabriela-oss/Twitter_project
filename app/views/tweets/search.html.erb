@@ -1,20 +1,4 @@
-<p id="notice"><%= notice %></p>
-<h1>Tweets</h1>
-<%if user_signed_in?%>
-
-<%= render 'form', tweet: @tweet %>
-
-<%end%>
-<br>
-<%= form_with url: 'search', method: :get do |form| %>
-  <div>
-    <%=form.label :content, "Buscar tweets:" %>
-    <%= form.text_field :content, class:'form-control' %>
-  </div>
-  <%= form.submit "Buscar" %>
-<% end %>
-<br>
-
+<h1> Search Results </h1>
 <table>
   <thead>
     <tr>
@@ -37,20 +21,9 @@
         <% else %>
         <td> <%= link_to time_ago_in_words(tweet.created_at), tweet %> </td>
         <% end %>
-        <td>
-        <% if current_user %>
-        <%= link_to 'Edit', edit_tweet_path(tweet) %>
-        <% end %>
-        </td>
-        <td>
-        <% if current_user %>
-        <%= link_to 'Destroy', tweet, method: :delete, data: { confirm: 'Are you sure?' } %>
-        <% end %>
-        </td>
       </tr>
       <% end %>
   </tbody>
 </table>
 
-<br>
 

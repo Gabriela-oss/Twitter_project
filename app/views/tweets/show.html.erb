@@ -32,5 +32,7 @@
 
 <%= link_to 'Edit', edit_tweet_path(@tweet) %> |
 <%= link_to 'Back', tweets_path %>
-<%= button_to 'Like', tweet_likes_path(@tweet), method: :post, disabled: !current_user %>
 
+<% if current_user %>    
+<%= button_to 'Like', tweet_likes_path(@tweet), method: :post, disabled: !current_user %>
+<% end %>

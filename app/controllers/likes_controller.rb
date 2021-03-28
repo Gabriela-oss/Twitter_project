@@ -1,5 +1,7 @@
 class LikesController < ApplicationController
   before_action :find_tweet
+  before_action :authenticate_user!, only: %i[ create ]
+
   
   def create
     
