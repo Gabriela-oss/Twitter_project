@@ -3,21 +3,16 @@ class TweetsController < ApplicationController
 
   # GET /tweets or /tweets.json
   def index
+    # binding.pry
     @tweet = Tweet.new
     if current_user
-      friend_ids = Friend.where(user_id: current_user).pluck(:friends_id)
-      @tweets = []
-      friend_ids.each do |friend_id| 
-        User.find(friend_id).tweets.each do |tweet|
-          @tweets.push tweet
-        end
-      end
+      friend_ids = Friend.where(user_id: current_user).pluck(:friends_id)      
+      @tweets = Tweet.where(user_id: friend_ids)
     else
       @tweets = Tweet.includes([:user]).all
-      @tweets = @tweets.order(updated_at: :desc).page(params[:page])
-      @tweets
     end
-    # binding.pry
+
+    @tweets = @tweets.order(updated_at: :desc).page(params[:page])
   end
 
   # GET /tweets/1 or /tweets/1.json
@@ -76,8 +71,14 @@ class TweetsController < ApplicationController
 
   def search
     @tweet = Tweet.new
-    #@tweets = Tweet.where.page(params[:page, :content => "%#{params[:search]}%"])
-    @tweets = Tweet.where('lower(content) LIKE :content', content: "#{params[:content]}%").page(params[:page])
+    if current_user
+      friend_ids = Friend.where(user_id: current_user).pluck(:friends_id)      
+      @tweets = Tweet.where(user_id: friend_ids)
+    else
+      @tweets = Tweet.includes([:user]).all
+    end
+
+    @tweets = @tweets.where('lower(content) LIKE :content', content: "%#{params[:content].downcase}%").page(params[:page])
   end
 
   private

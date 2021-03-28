@@ -29,11 +29,7 @@
   <tbody>
       <% @tweets.each do |tweet| %>
       <tr>
-        <td>
-          <%= render_with_tags(tweet.content) %> 
-          <p><%= tweet.likes.count %> 
-          <%= (tweet.likes.count) == 1 ? 'Like' : 'Likes'%></p>
-        </td>        
+        <td><%= render_with_tags(tweet.content) %> <p><%= tweet.likes.count %> <%= (tweet.likes.count) == 1 ? 'Like' : 'Likes'%></p></td>        
         <td class= "border border-info" ><%= image_tag (tweet.user.photo || '') %></td>
         <td><%= tweet.active %></td>
         <% if tweet.created_at < 1.hour.ago%> 
