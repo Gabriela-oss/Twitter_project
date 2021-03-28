@@ -6,16 +6,17 @@ class LikesController < ApplicationController
   def create
     
     result  = @tweet.likes.where(user_id: current_user.id).first
-  if result
-    result.destroy
+    if result
+      result.destroy
     else
-    @tweet.likes.create(user_id: current_user.id)
+      @tweet.likes.create(user_id: current_user.id)
     end
-    redirect_to tweet_path(@tweet)
     
     if already_liked?
       flash[:notice] = "You can't like more than once"
     end
+
+    redirect_to tweets_path
   end
   
   private

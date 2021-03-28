@@ -12,7 +12,7 @@ class TweetsController < ApplicationController
       @tweets = Tweet.includes([:user]).all
     end
 
-    @tweets = @tweets.order(updated_at: :desc).page(params[:page])
+    @tweets = @tweets.order(updated_at: :desc).page(params[:page]).per(10)
   end
 
   # GET /tweets/1 or /tweets/1.json
